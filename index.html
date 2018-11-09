@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <section>
+                <div class="title">Todo List</div>
+                <input  placeholder="添加Todo" v-model="newItem" @keyup.enter="addNew">
+            </section>        
+        </header>
+        <section>
+            <h3>进行中 <span>{{unfinished}}</span></h3>
+            <ul class="list-unstyled">            
+                <li v-for="item in items" v-if="!item.isFinished" @click="exchange(item)">
+                    {{item.lable}}
+                    <span class="glyphicon glyphicon-minus" @click="remove(item)"></span>
+                </li>
+            </ul>
+            <h3>已完成 <span>{{finished}}</span></h3>        
+            <ul class="list-unstyled">                
+                <li v-for="item in items" v-if="item.isFinished" @click="exchange(item)">
+                    {{item.lable}}
+                    <span class="glyphicon glyphicon-minus" @click="remove(item)"></span>
+                </li>
+            </ul>
+        </section>
+        <footer>
+            Copyright © 2018 Todo List <span @click="remove({})">clearAll</span>
+        </footer>
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                items: [],
+                newItem:'',
+            },
+            computed: {
+                unfinished: function(){
+                    var i = 0;
+                    this.items.forEach((item,index)=>{
+                        if(!item.isFinished)
+                            i++;
+                    })
+                    return i;
+                },
+                finished: function(){
+                    var i = 0;
+                    this.items.forEach((item,index)=>{
+                        if(item.isFinished)
+                            i++;
+                    })
+                    return i;
+                }
+            },
+            methods: {
+                exchange: function(item){
+                    item.isFinished = !item.isFinished;
+                },
+                addNew: function(){
+                    this.items.push({
+                        
+                            lable: this.newItem,
+                            isFinished: false,
+                            index: this.items.length
+                    })
+                    this.newItem = '';
+                },
+                remove: function(item){
+                    this.items.splice(item.index)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
