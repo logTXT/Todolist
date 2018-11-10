@@ -22,7 +22,7 @@
                 <li v-for="item in items" v-if="!item.isFinished" >
                     <input type="checkbox" @click="exchange(item)">
                     <span>{{item.lable}}</span>
-                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item.index)"></span>
+                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item)"></span>
                 </li>
             </ul>
             <h3>已完成 <span>{{finished}}</span></h3>        
@@ -30,7 +30,7 @@
                 <li  v-for="item in items" v-if="item.isFinished">
                     <input type="checkbox" @click="exchange(item)" checked="checked">
                     <span>{{item.lable}}</span>
-                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item.index)"></span>
+                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item)"></span>
                 </li>
             </ul>
         </section>
@@ -84,8 +84,17 @@
                     })
                     this.newItem = '';
                 },
-                remove: function(index){
-                    this.items.splice(index,1)
+                indexOf: function(temp) {
+                    this.items.forEach((item,index)=>{
+                        if(item == temp)
+                            return index
+                    });
+                    return -1;
+                }
+                ,
+                remove: function(item){
+                    var index = this.indexOf(item);
+                    this.items.splice(index,1);
                 },
             },
             watch: {
