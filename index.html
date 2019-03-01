@@ -35,7 +35,7 @@
             </ul>
         </section>
         <footer class="text-center">
-            Copyright © 2018 Todo List <span @click="remove({})">clearAll</span>
+            Copyright © 2018 Todo List <span id="clearAll" @click="clearAll()">clearAll</span>
         </footer>
     </div>
     <script>
@@ -97,6 +97,9 @@
                     var index = this.indexOf(item);
                     this.items.splice(index,1);
                 },
+                clearAll: function(){
+                    this.item = []
+                },                
             },
             watch: {
                 items: {
