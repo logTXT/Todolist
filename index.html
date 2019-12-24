@@ -2,118 +2,49 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="icon" href="./favicon.ico">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <meta charset="UTF-8" />
+  <title>Todo List</title>
+  <link rel="stylesheet" href="./css/reset.css" />
+  <link rel="stylesheet" type="text/css" href="./css/index.css" />
+  <link rel="icon" href="./favicon.ico" />
 </head>
 
 <body>
-    <div id="app" class="container">
-        <header>
-            <section>
-                <div class="title">Todo List</div>
-                <input placeholder="添加Todo" v-model="newItem" @keyup.enter="addNew">
-            </section>
-        </header>
-        <section>
-            <h3>进行中 <span>{{unfinished}}</span></h3>
-            <ul class="list-unstyled todolist">
-                <li v-for="item in items" v-if="!item.isFinished">
-                    <input type="checkbox" @click="exchange(item)">
-                    <span>{{item.lable}}</span>
-                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item)"></span>
-                </li>
-            </ul>
-            <h3>已完成 <span>{{finished}}</span></h3>
-            <ul class="list-unstyled donelist">
-                <li v-for="item in items" v-if="item.isFinished">
-                    <input type="checkbox" @click="exchange(item)" checked="checked">
-                    <span>{{item.lable}}</span>
-                    <span class="glyphicon glyphicon-minus-sign" @click="remove(item)"></span>
-                </li>
-            </ul>
-        </section>
-        <footer class="text-center">
-            Copyright © 2018 Todo List <a id="clearAll" @click="clearAll()">clearAll</a>
-        </footer>
-    </div>
-    <script>
-        var Storage = {
-            fetch: () => {
-                return JSON.parse(window.localStorage.getItem("todoList") || '[]')
-            },
-            save: (items) => {
-                window.localStorage.setItem("todoList", JSON.stringify(items))
-            },
-        }
-
-        var app = new Vue({
-            el: "#app",
-            data: {
-                items: Storage.fetch(),
-                newItem: '',
-            },
-            computed: {
-                unfinished: function () {
-                    var i = 0;
-                    this.items.forEach((item, index) => {
-                        if (!item.isFinished)
-                            i++;
-                    })
-                    return i;
-                },
-                finished: function () {
-                    var i = 0;
-                    this.items.forEach((item, index) => {
-                        if (item.isFinished)
-                            i++;
-                    })
-                    return i;
-                }
-            },
-            methods: {
-                exchange: function (item) {
-                    item.isFinished = !item.isFinished;
-                },
-                addNew: function () {
-                    this.items.unshift({
-                        lable: this.newItem,
-                        isFinished: false,
-                        index: this.items.length
-                    })
-                    this.newItem = '';
-                },
-                indexOf: function (temp) {
-                    var i = -1;
-                    this.items.forEach((item, index) => {
-                        if (item == temp)
-                            i = index
-                    });
-                    return i;
-                }
-                ,
-                remove: function (item) {
-                    var index = this.indexOf(item);
-                    this.items.splice(index, 1);
-                },
-                clearAll: function () {
-                    this.items = []
-                },
-            },
-            watch: {
-                items: {
-                    handler: (items) => {
-                        Storage.save(items)
-                    },
-                    deep: true
-                },
-            }
-        })
-    </script>
+  <div id="app" class="container">
+    <header>
+      <section>
+        <h1 class="title">Todo List</h1>
+        <div class="input-container">
+          <input class="input" placeholder="input todo" v-model="newItem" @keyup.enter="addNew" />
+          <div class="search-result"></div>
+        </div>
+      </section>
+    </header>
+    <section class="main">
+      <h2 class="list-header">进行中 <span>{{unfinished}}</span></h2>
+      <ul class=" todolist">
+        <li v-for="item in items" v-if="!item.isFinished">
+          <input type="checkbox" @click="exchange(item)" />
+          <span>{{item.lable}}</span>
+          <span class="close" @click="remove(item)">&#10006</span>
+        </li>
+      </ul>
+      <h2 class="list-header">已完成 <span>{{finished}}</span></h2>
+      <ul class=" donelist">
+        <li v-for="item in items" v-if="item.isFinished">
+          <input type="checkbox" @click="exchange(item)" checked="checked" />
+          <span>{{item.lable}}</span>
+          <span class="close" @click="remove(item)">&#10006</span>
+        </li>
+      </ul>
+    </section>
+    <footer class="text-center">
+      Copyright © 2018 Todo List
+      <span id="clearAll" @click="clearAll()">clearAll</span>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+  <script src="./js/app.js"></script>
 </body>
 
 </html>
